@@ -1,0 +1,12 @@
+{
+  "name": "loganathan-functions",
+  "description": "Secure backend for Loganathan V2 — holds the Anthropic API key server-side and proxies chat requests.",
+  "engines": { "node": "20" },
+  "main": "index.js",
+  "type": "commonjs",
+  "dependencies": {
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.1"
+  },
+  "private": true
+}
