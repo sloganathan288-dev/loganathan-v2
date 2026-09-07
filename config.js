@@ -10,13 +10,15 @@
 // It lives only in the Cloud Function's secret (see functions/README section
 // in the main README.md).
 
-export const FIREBASE_CONFIG = {
-  apiKey: "YOUR_FIREBASE_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID",
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAOSg0JsbiBT6RMlLHjOSZLTG4DslZhnjE",
+  authDomain: "loganathan-v2.firebaseapp.com",
+  projectId: "loganathan-v2",
+  storageBucket: "loganathan-v2.firebasestorage.app",
+  messagingSenderId: "244368200551",
+  appId: "1:244368200551:web:4a7a409183af2cb683d5c2",
+  measurementId: "G-FNMQ7HB7RD"
 };
 
 // Region your Cloud Function is deployed to. "us-central1" is the default
@@ -24,7 +26,7 @@ export const FIREBASE_CONFIG = {
 export const FUNCTIONS_REGION = "us-central1";
 
 // App-wide constants
-export const APP_NAME = "Loganathan";
+export const APP_NAME = "AIXLEAON";
 export const MAX_IMAGE_MB = 5;
 export const MAX_FILE_MB = 10;
 export const CONTEXT_RECENT_MESSAGES = 12; // how many recent messages get sent in full to the AI
