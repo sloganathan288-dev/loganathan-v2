@@ -1,0 +1,21 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /users/{uid}/{allPaths=**} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+
+      // Uploads/updates must be owned by the signed-in user and stay under 10 MB.
+      allow write: if request.auth != null
+                    && request.auth.uid == uid
+                    && request.resource != null
+                    && request.resource.size < 10 * 1024 * 1024;
+
+      // Deletes have no request.resource, so keep this separate.
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

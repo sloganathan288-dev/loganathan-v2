@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loganathan — your personal AI workspace</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="offlineBanner" class="offline-banner hidden" role="status">You're offline — messages can't be sent right now.</div>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<section id="loginScreen" class="login-screen">
+  <div class="login-hero">
+    <p class="brand-mark">Loganathan</p>
+    <h1 class="login-headline">An assistant that<br>actually remembers you.</h1>
+    <p class="login-sub">Sign in once. Loganathan learns your name, keeps your projects organized, and picks up every conversation exactly where you left it.</p>
+  </div>
+  <div class="login-card-wrap">
+    <div class="login-card">
+      <p class="login-card-label">Sign in to continue</p>
+      <button id="googleSignInBtn" class="google-btn">
+        <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.98v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.17.28-1.7V4.97H.98A9 9 0 0 0 0 9c0 1.45.35 2.83.98 4.03l2.97-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .98 4.97l2.97 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
+        Continue with Google
+      </button>
+      <p class="login-note">We use your Google name and email to greet you and keep your workspace private. Nothing is shared with anyone else.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== APP SHELL ===== -->
+<section id="appScreen" class="app-shell hidden">
+
+  <!-- mobile top bar -->
+  <header class="mobile-bar">
+    <button id="drawerToggle" class="icon-btn" aria-label="Open menu">☰</button>
+    <p class="brand-mark small">Loganathan</p>
+    <button id="mobileNewChat" class="icon-btn" aria-label="New chat">+</button>
+  </header>
+  <div id="drawerBackdrop" class="drawer-backdrop hidden"></div>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-top">
+      <p class="brand-mark">Loganathan</p>
+      <button id="collapseBtn" class="icon-btn ghost" aria-label="Collapse sidebar" title="Collapse sidebar">«</button>
+    </div>
+
+    <button id="newChatBtn" class="new-chat-btn">
+      <span>+</span> New Chat
+    </button>
+
+    <div class="search-wrap">
+      <input id="searchInput" class="search-input" type="text" placeholder="Search conversations…" aria-label="Search conversations">
+    </div>
+
+    <div class="workspace-switcher">
+      <label class="section-label" for="workspaceSelect">Workspace</label>
+      <select id="workspaceSelect" class="workspace-select">
+        <option value="personal">Personal</option>
+        <option value="private">Private</option>
+      </select>
+      <p id="workspaceHint" class="workspace-hint"></p>
+    </div>
+
+    <nav id="conversationList" class="conversation-list" aria-label="Conversation history">
+      <!-- populated by app.js -->
+    </nav>
+
+    <div class="sidebar-bottom">
+      <button id="memoryNavBtn" class="sidebar-nav-btn">🧠 Memory</button>
+      <button id="filesNavBtn" class="sidebar-nav-btn">📁 Files</button>
+      <button id="settingsNavBtn" class="sidebar-nav-btn">⚙ Settings</button>
+
+      <div class="profile-wrap">
+        <button id="profileBtn" class="profile-btn">
+          <img id="profileAvatar" class="profile-avatar" alt="">
+          <span id="profileName" class="profile-name"></span>
+        </button>
+        <div id="profileMenu" class="profile-menu hidden">
+          <p id="profileMenuName" class="profile-menu-name"></p>
+          <p id="profileMenuEmail" class="profile-menu-email"></p>
+          <button id="signOutBtn" class="text-btn danger">Sign out</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN CHAT ===== -->
+  <main class="chat-main">
+    <div id="privateBanner" class="private-banner hidden">🔒 Private workspace — this conversation won't be added to long-term memory.</div>
+
+    <div id="emptyState" class="empty-state">
+      <p class="empty-greeting" id="emptyGreeting">Good evening.</p>
+      <p class="empty-sub">What can I help you with?</p>
+      <div class="suggestion-grid">
+        <button class="suggestion-card" data-prompt="Can you analyze this image for me?">🖼️ Analyze an image</button>
+        <button class="suggestion-card" data-prompt="Help me write ">✍️ Help me write something</button>
+        <button class="suggestion-card" data-prompt="Explain this to me simply: ">💡 Explain a difficult topic</button>
+        <button class="suggestion-card" data-prompt="Can you help debug this code?
+
+">🐞 Debug my code</button>
+        <button class="suggestion-card" data-prompt="Summarize this document for me.">📄 Summarize a document</button>
+        <button class="suggestion-card" data-prompt="Let's brainstorm ideas for ">🧩 Brainstorm an idea</button>
+      </div>
+    </div>
+
+    <div id="messages" class="messages hidden"></div>
+
+    <div id="attachmentPreviews" class="attachment-previews hidden"></div>
+
+    <form id="chatForm" class="chat-form">
+      <button type="button" id="attachBtn" class="icon-btn ghost" aria-label="Attach file" title="Attach image or file">📎</button>
+      <input id="fileInput" type="file" multiple accept=".png,.jpg,.jpeg,.webp,.pdf,.txt,.csv,.json,.md,.js,.ts,.py,.html,.css,.doc,.docx" class="hidden">
+      <textarea id="chatInput" class="chat-input" placeholder="Message Loganathan…" rows="1" autocomplete="off"></textarea>
+      <button type="button" id="stopBtn" class="stop-btn hidden">Stop</button>
+      <button type="submit" id="sendBtn" class="send-btn">Send</button>
+    </form>
+    <p class="composer-hint">Enter to send · Shift + Enter for a new line</p>
+  </main>
+</section>
+
+<!-- ===== MEMORY CENTER MODAL ===== -->
+<div id="memoryModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-label="Memory center">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <p class="modal-title">Memory Center</p>
+      <button class="icon-btn ghost close-modal" aria-label="Close">✕</button>
+    </div>
+    <p class="modal-sub">What Loganathan remembers about you. Say "remember that…" in chat to add something, or manage it directly here.</p>
+    <div class="memory-add-row">
+      <input id="newMemoryInput" class="modal-input" type="text" placeholder="Add something to remember…">
+      <button id="addMemoryBtn" class="cta-btn">Add</button>
+    </div>
+    <div id="memoryList" class="memory-list"></div>
+    <div class="modal-actions">
+      <button id="clearAllMemoryBtn" class="text-btn danger">Clear all memory</button>
+      <button class="text-btn close-modal">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FILE LIBRARY MODAL ===== -->
+<div id="filesModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-label="File library">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <p class="modal-title">File Library</p>
+      <button class="icon-btn ghost close-modal" aria-label="Close">✕</button>
+    </div>
+    <p class="modal-sub">Everything you've uploaded, in one place.</p>
+    <div id="fileLibraryList" class="file-library-list"></div>
+    <div class="modal-actions">
+      <button class="text-btn close-modal">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SETTINGS MODAL ===== -->
+<div id="settingsModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-label="Settings">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <p class="modal-title">Settings</p>
+      <button class="icon-btn ghost close-modal" aria-label="Close">✕</button>
+    </div>
+
+    <div class="settings-section">
+      <p class="settings-section-title">Chat</p>
+      <label class="settings-row">
+        <span>Enter to send</span>
+        <input type="checkbox" id="enterToSendToggle" checked>
+      </label>
+    </div>
+
+    <div class="settings-section">
+      <p class="settings-section-title">Memory</p>
+      <label class="settings-row">
+        <span>Allow Loganathan to remember useful information</span>
+        <input type="checkbox" id="memoryEnabledToggle" checked>
+      </label>
+      <button id="openMemoryFromSettings" class="text-btn">Manage memory →</button>
+    </div>
+
+    <div class="settings-section">
+      <p class="settings-section-title">Privacy</p>
+      <p class="settings-note">Private workspace conversations are kept separate and never added to long-term memory automatically.</p>
+    </div>
+
+    <div class="settings-section">
+      <p class="settings-section-title">Archived chats</p>
+      <div id="archivedList" class="archived-list"></div>
+    </div>
+
+    <div class="settings-section">
+      <p class="settings-section-title">Account</p>
+      <div class="account-row">
+        <img id="settingsAvatar" class="profile-avatar" alt="">
+        <div>
+          <p id="settingsName" class="account-name"></p>
+          <p id="settingsEmail" class="account-email"></p>
+        </div>
+      </div>
+      <button id="settingsSignOutBtn" class="text-btn danger">Sign out</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== RENAME MODAL ===== -->
+<div id="renameModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-label="Rename conversation">
+  <div class="modal">
+    <p class="modal-title">Rename conversation</p>
+    <input id="renameInput" class="modal-input" type="text">
+    <div class="modal-actions">
+      <button class="text-btn close-modal">Cancel</button>
+      <button id="confirmRenameBtn" class="cta-btn">Save</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
