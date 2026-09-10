@@ -1774,18 +1774,32 @@ async function runAssistantTurn(
       .filter(Boolean)
       .join("\n\n");
 
-    const callChat =
-      httpsCallable(
-        functions,
-        "chatWithLoganathan"
-      );
+   const workerResponse = await fetch(
+  "/api/chat",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      systemPrompt,
+      messages: historyForApi,
+    }),
+  }
+);
 
-    const result =
-      await callChat({
-        systemPrompt,
-        messages:
-          historyForApi,
-      });
+const workerData = await workerResponse.json();
+
+if (!workerResponse.ok) {
+  throw new Error(
+    workerData?.error ||
+    "AI Worker request failed."
+  );
+}
+
+const result = {
+  data: workerData,
+};
 
     if (ignoreNextResponse) {
       ignoreNextResponse = false;
