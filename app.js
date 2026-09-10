@@ -1775,7 +1775,7 @@ async function runAssistantTurn(
       .join("\n\n");
 
    const workerResponse = await fetch(
-  "/api/chat",
+  "https://loganathan-v2.vercel.app/api/chat",
   {
     method: "POST",
     headers: {
