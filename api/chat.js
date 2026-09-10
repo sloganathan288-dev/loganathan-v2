@@ -1,5 +1,6 @@
 const ALLOWED_ORIGINS = new Set([
   "https://sloganathan288-dev.github.io",
+  "https://loganathan-v2.vercel.app",
   "http://localhost:5500",
   "http://127.0.0.1:5500",
 ]);
